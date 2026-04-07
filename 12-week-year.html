@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>12‑Week Year Planner</title>
+  <title>12‑Week Year Scorecard</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>12‑Week Year Planner</h1>
+    <img src="logo.png" alt="Z by M2M Logo">
+    <h1>12‑Week Year Scorecard</h1>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -28,43 +29,158 @@
     </nav>
   </header>
   <main>
-    <section>
-      <h2>Track Your Goals</h2>
-      <p>This simple planner helps you break down your goals into weekly tasks. The
-      12‑Week Year productivity system encourages you to focus on shorter
-      execution cycles and hold yourself accountable【392972657872649†L1-L215】. Add
-      tasks along with target dates and track your progress below.</p>
-      <form id="task-form">
-        <label for="task-name">Task:</label><br>
-        <input type="text" id="task-name" name="task-name" required><br><br>
-        <label for="due-date">Due Date:</label><br>
-        <input type="date" id="due-date" name="due-date" required><br><br>
-        <button type="submit">Add Task</button>
-      </form>
-      <h3>Your Tasks</h3>
-      <ul id="task-list"></ul>
+    <section class="scorecard-container">
+      <h2>12‑Week Year Scorecard</h2>
+      <p>The 12‑Week Year framework compresses annual goals into 12‑week cycles to drive focused execution and accountability. This digital scorecard reflects your default weekly plan and helps you track progress across key activities. Each column below represents a weekly habit; mark completed tasks, enter counts, and your score will update automatically.</p>
+      <h3>Quarterly Goals</h3>
+      <ul>
+        <li>Hold 25 new open house events.</li>
+        <li>Host 25 open house sessions.</li>
+        <li>Sign one new listing each week.</li>
+        <li>Generate four new leads per week.</li>
+        <li>Convert four new leads per week.</li>
+        <li>Complete one CE course or Broker exam each week.</li>
+        <li>Sign three new listings each month.</li>
+        <li>Make 25 calls to new prospects every day.</li>
+        <li>Network and attend events regularly.</li>
+      </ul>
+      <h3>Weekly Actions</h3>
+      <ul>
+        <li>50 new introductions.</li>
+        <li>25 calls to new prospects.</li>
+        <li>Four open house events.</li>
+        <li>Ten new leads from open houses.</li>
+        <li>Five conversions.</li>
+        <li>Two follow‑ups.</li>
+        <li>One property tour.</li>
+      </ul>
+      <table id="scorecard">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Open House &amp; Events</th>
+            <th>Media Day</th>
+            <th>1 hr of CE/Broker Exam</th>
+            <th>Calls to Prospects (25 calls)</th>
+            <th>New Leads</th>
+            <th>Strategic Consultation</th>
+            <th>Score (%)</th>
+          </tr>
+        </thead>
+        <tbody id="scorecard-body">
+          <!-- Rows will be populated by JavaScript -->
+        </tbody>
+      </table>
+      <p><em>Week 13: Planning and relaxation.</em></p>
     </section>
   </main>
   <footer>
     <p>&copy; 2026 Marching To More Solutions</p>
   </footer>
   <script>
-    const taskForm = document.getElementById('task-form');
-    const taskList = document.getElementById('task-list');
-    taskForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('task-name').value.trim();
-      const due = document.getElementById('due-date').value;
-      if (!name || !due) return;
-      const li = document.createElement('li');
-      li.textContent = `${name} (Due: ${due})`;
-      // add checkbox for completion
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.style.marginRight = '0.5rem';
-      li.prepend(checkbox);
-      taskList.appendChild(li);
-      taskForm.reset();
+    // Dates for the 12-week cycle (default)
+    const weekDates = [
+      '04/13/26','04/20/26','04/27/26',
+      '05/04/26','05/11/26','05/18/26',
+      '05/25/26','06/01/26','06/08/26',
+      '06/18/26','06/22/26','06/29/26'
+    ];
+    const categories = [
+      { key:'open_house', label:'Open House & Events', type:'checkbox' },
+      { key:'media_day', label:'Media Day', type:'checkbox' },
+      { key:'ce', label:'1 hr of CE/Broker Exam', type:'checkbox' },
+      { key:'calls', label:'Calls to Prospects', type:'number' },
+      { key:'leads', label:'New Leads', type:'number' },
+      { key:'consultation', label:'Strategic Consultation', type:'checkbox' }
+    ];
+
+    // Load saved data from localStorage
+    let scorecardData = {};
+    try {
+      scorecardData = JSON.parse(localStorage.getItem('scorecardData')) || {};
+    } catch (e) {
+      scorecardData = {};
+    }
+
+    function computeScore(row) {
+      let total = 0;
+      // Each checkbox counts as 1 when true
+      total += row.open_house ? 1 : 0;
+      total += row.media_day ? 1 : 0;
+      total += row.ce ? 1 : 0;
+      // Calls: one point per 25 calls, capped at 1
+      const callPoints = Math.min(1, (row.calls || 0) / 25);
+      total += callPoints;
+      // Leads: 1 point if at least one new lead
+      total += (row.leads || 0) > 0 ? 1 : 0;
+      // Consultation: 1 point if done
+      total += row.consultation ? 1 : 0;
+      return ((total / categories.length) * 100).toFixed(0);
+    }
+
+    function renderScorecard() {
+      const tbody = document.getElementById('scorecard-body');
+      tbody.innerHTML = '';
+      weekDates.forEach((date) => {
+        const rowData = scorecardData[date] || {};
+        const tr = document.createElement('tr');
+        // Date cell
+        const dateTd = document.createElement('td');
+        dateTd.textContent = date;
+        tr.appendChild(dateTd);
+        // Category cells
+        categories.forEach((cat) => {
+          const td = document.createElement('td');
+          if (cat.type === 'checkbox') {
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.checked = !!rowData[cat.key];
+            input.addEventListener('change', () => {
+              scorecardData[date] = scorecardData[date] || {};
+              scorecardData[date][cat.key] = input.checked;
+              updateScore(date, tr);
+              localStorage.setItem('scorecardData', JSON.stringify(scorecardData));
+            });
+            td.appendChild(input);
+          } else if (cat.type === 'number') {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = 0;
+            input.step = 1;
+            input.value = rowData[cat.key] || '';
+            input.addEventListener('input', () => {
+              scorecardData[date] = scorecardData[date] || {};
+              scorecardData[date][cat.key] = parseInt(input.value) || 0;
+              updateScore(date, tr);
+              localStorage.setItem('scorecardData', JSON.stringify(scorecardData));
+            });
+            td.appendChild(input);
+          }
+          tr.appendChild(td);
+        });
+        // Score cell
+        const scoreTd = document.createElement('td');
+        scoreTd.className = 'score-cell';
+        tr.appendChild(scoreTd);
+        tbody.appendChild(tr);
+        // initial score update
+        updateScore(date, tr);
+      });
+    }
+
+    function updateScore(date, tr) {
+      const rowData = scorecardData[date] || {};
+      const score = computeScore(rowData);
+      // Last cell in the row
+      const scoreTd = tr.querySelector('.score-cell');
+      if (scoreTd) {
+        scoreTd.textContent = score + '%';
+      }
+    }
+
+    // Initial render
+    document.addEventListener('DOMContentLoaded', () => {
+      renderScorecard();
     });
   </script>
 </body>

@@ -8,9 +8,17 @@ body {
 }
 
 header {
-  background-color: #1D6A2E; /* deep green inspired by vision document */
+  /* Updated dark green header to match scorecard colour */
+  background-color: #0E4C28;
   color: #fff;
+  display: flex;
+  align-items: center;
   padding: 1rem;
+}
+
+header img {
+  height: 40px;
+  margin-right: 0.75rem;
 }
 
 header h1 {
@@ -38,6 +46,38 @@ nav a {
 
 nav a:hover {
   text-decoration: underline;
+}
+
+/* Scorecard table styles */
+#scorecard {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+#scorecard th {
+  background-color: #0E4C28;
+  color: #D4AF37;
+  padding: 0.5rem;
+  text-align: left;
+}
+#scorecard td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: center;
+}
+#scorecard tbody tr:nth-child(odd) {
+  background-color: #faf5e4; /* light gold tone */
+}
+#scorecard tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+#scorecard tfoot td {
+  font-weight: bold;
+}
+
+/* Ensure section backgrounds don't conflict with the gold tones */
+section.scorecard-container {
+  background-color: #fdf9ee;
 }
 
 main {
