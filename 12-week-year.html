@@ -3,13 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Poppins font for modern look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <title>12‑Week Year Scorecard</title>
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Tailwind CSS and custom Tailwind config for brand colours -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Configure Tailwind with brand colours
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0A4D3C',
+            gold: '#D4AF37',
+            darkgrey: '#4F4F4F',
+            black: '#000000'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Chart.js for visualising weekly performance -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Supabase JS client (placeholder keys to be replaced) -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Z by M2M Logo">
     <h1>12‑Week Year Scorecard</h1>
+    <!-- Theme toggle button -->
+    <button id="themeToggle" style="background:none;border:none;color:var(--gold);font-size:1.2rem;cursor:pointer;" title="Toggle dark/light mode">🌙</button>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -25,6 +53,8 @@
         <li><a href="voice-assistant.html">AI Assistant</a></li>
         <li><a href="crm.html">CRM</a></li>
         <li><a href="collaboration.html">Collaboration</a></li>
+      <!-- Slack workspace link for quick access -->
+      <li><a href="https://app.slack.com/client/T0AS21MS43S/C0AR7P8SATC" target="_blank">Slack</a></li>
       </ul>
     </nav>
   </header>
@@ -72,12 +102,37 @@
         </tbody>
       </table>
       <p><em>Week 13: Planning and relaxation.</em></p>
+      <!-- Upcoming events list pulled from Google Calendar -->
+      <h3>Upcoming Calendar Events</h3>
+      <p>Sync your personal and team commitments in one place. Here are the
+      next few events from your Google Calendar. These entries were pulled
+      using the Calendar connector for the two weeks following your current date.
+      In a production environment the events list would refresh automatically.</p>
+      <ul id="event-list" style="list-style:none;padding:0;"></ul>
+      <!-- Notification container for score updates -->
+      <div id="notification-container"></div>
+      <!-- Chart to display weekly score progression -->
+      <h3>Weekly Score Trends</h3>
+      <canvas id="scoreChart" height="200"></canvas>
     </section>
   </main>
   <footer>
     <p>&copy; 2026 Marching To More Solutions</p>
   </footer>
   <script>
+    // Supabase client initialisation (replace with your project's URL and anon key)
+    const supabaseUrl = 'YOUR_SUPABASE_URL';
+    const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+    // initialise Supabase client only if real credentials are provided; use a separate name to avoid clashing with global supabase import
+    let supabaseClient = null;
+    try {
+      if (supabaseUrl && supabaseKey && supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY' && window.supabase) {
+        supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+      }
+    } catch (e) {
+      console.warn('Supabase init error', e);
+    }
+
     // Dates for the 12-week cycle (default)
     const weekDates = [
       '04/13/26','04/20/26','04/27/26',
@@ -163,24 +218,150 @@
         scoreTd.className = 'score-cell';
         tr.appendChild(scoreTd);
         tbody.appendChild(tr);
-        // initial score update
-        updateScore(date, tr);
+        // initial score update (silent so no notification)
+        updateScore(date, tr, true);
       });
     }
 
-    function updateScore(date, tr) {
+    function updateScore(date, tr, silent = false) {
       const rowData = scorecardData[date] || {};
       const score = computeScore(rowData);
       // Last cell in the row
       const scoreTd = tr.querySelector('.score-cell');
       if (scoreTd) {
-        scoreTd.textContent = score + '%';
+        // Create progress bar markup
+        scoreTd.innerHTML = `<div class="progress-container"><div class="progress-bar" style="width:${score}%">${score}%</div></div>`;
       }
+      if (!silent) {
+        notify(`Updated score for ${date}: ${score}%`);
+      }
+      // Update chart whenever a score changes
+      updateChart();
+    }
+
+    // Show notification messages
+    function notify(message) {
+      const container = document.getElementById('notification-container');
+      if (!container) return;
+      const div = document.createElement('div');
+      div.className = 'notification';
+      div.textContent = message;
+      container.appendChild(div);
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        div.remove();
+      }, 5000);
+    }
+
+    // List of upcoming events from Google Calendar. Each entry includes
+    // the title, start/end times and location. These values were retrieved via
+    // the Calendar connector for demonstration purposes and are static in this
+    // prototype. In a live implementation the list would be fetched server-side.
+    const upcomingEvents = [
+      {
+        title: 'Office',
+        start: 'Apr 7, 2026 12:00 AM',
+        end: 'Apr 8, 2026 12:00 AM',
+        location: ''
+      },
+      {
+        title: 'Gym',
+        start: 'Apr 7, 2026 6:00 AM',
+        end: 'Apr 7, 2026 7:00 AM',
+        location: ''
+      },
+      {
+        title: 'Website with JD',
+        start: 'Apr 7, 2026 1:30 PM',
+        end: 'Apr 7, 2026 4:30 PM',
+        location: '600 Lynnhaven Pkwy, Virginia Beach, VA'
+      },
+      {
+        title: 'M2M Podcast',
+        start: 'Apr 7, 2026 6:30 PM',
+        end: 'Apr 7, 2026 8:30 PM',
+        location: '600 Lynnhaven Pkwy, Virginia Beach, VA'
+      },
+      {
+        title: 'LOVE of Self leads to wealth',
+        start: 'Apr 7, 2026 9:30 PM',
+        end: 'Apr 7, 2026 10:30 PM',
+        location: ''
+      }
+    ];
+
+    function renderEvents() {
+      const list = document.getElementById('event-list');
+      if (!list) return;
+      list.innerHTML = '';
+      upcomingEvents.forEach(ev => {
+        const li = document.createElement('li');
+        li.style.marginBottom = '0.75rem';
+        li.innerHTML = `<strong>${ev.title}</strong><br><small>${ev.start} – ${ev.end}</small>${ev.location ? '<br><span style="font-size:0.85rem;">' + ev.location + '</span>' : ''}`;
+        list.appendChild(li);
+      });
     }
 
     // Initial render
     document.addEventListener('DOMContentLoaded', () => {
       renderScorecard();
+      renderEvents();
+      // Create the chart after the scorecard has rendered
+      createChart();
+      // Apply previously saved theme
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.getElementById('themeToggle').textContent = '☀️';
+      }
+    });
+
+    // Create Chart.js bar chart to show weekly scores
+    let scoreChart;
+    function createChart() {
+      const ctx = document.getElementById('scoreChart');
+      if (!ctx) return;
+      const data = weekDates.map(date => parseInt(computeScore(scorecardData[date] || {})));
+      scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: weekDates,
+          datasets: [{
+            label: 'Score (%)',
+            data: data,
+            backgroundColor: data.map(score => `rgba(13, 85, 62, ${0.5 + score / 200})`),
+            borderColor: data.map(() => '#0A4D3C'),
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true, max: 100 }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+    // Update chart data when a score changes
+    function updateChart() {
+      if (!scoreChart) return;
+      const data = weekDates.map(date => parseInt(computeScore(scorecardData[date] || {})));
+      scoreChart.data.datasets[0].data = data;
+      scoreChart.data.datasets[0].backgroundColor = data.map(score => `rgba(13, 85, 62, ${0.5 + score / 200})`);
+      scoreChart.update();
+    }
+
+    // Theme toggle handler
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+      const isDark = body.classList.contains('dark-theme');
+      // Update icon
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+      // Save preference
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
   </script>
 </body>
