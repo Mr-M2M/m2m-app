@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM &amp; Lead Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>CRM &amp; Lead Management</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Manage Leads</h2>
+      <p>The CRM module integrates your lead database with automated follow‑up and
+      scheduling functions【392972657872649†L1-L215】. This prototype lets you add
+      prospective leads and track whether they have been contacted.</p>
+      <form id="lead-form">
+        <label for="lead-name">Name:</label><br>
+        <input type="text" id="lead-name" required><br><br>
+        <label for="lead-email">Email:</label><br>
+        <input type="email" id="lead-email" required><br><br>
+        <label for="lead-phone">Phone:</label><br>
+        <input type="tel" id="lead-phone" required><br><br>
+        <label for="lead-notes">Notes:</label><br>
+        <textarea id="lead-notes" rows="3" cols="40"></textarea><br><br>
+        <button type="submit">Add Lead</button>
+      </form>
+      <h3>Leads</h3>
+      <table id="leads-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Notes</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const leadForm = document.getElementById('lead-form');
+    const leadsTableBody = document.querySelector('#leads-table tbody');
+    leadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('lead-name').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+      const phone = document.getElementById('lead-phone').value.trim();
+      const notes = document.getElementById('lead-notes').value.trim();
+      if (!name || !email || !phone) return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${name}</td>
+        <td>${email}</td>
+        <td>${phone}</td>
+        <td>${notes}</td>
+        <td class="status">New</td>
+        <td><button type="button" class="mark-contacted">Mark Contacted</button></td>
+      `;
+      leadsTableBody.appendChild(tr);
+      leadForm.reset();
+    });
+    leadsTableBody.addEventListener('click', (e) => {
+      if (e.target.classList.contains('mark-contacted')) {
+        const row = e.target.closest('tr');
+        row.querySelector('.status').textContent = 'Contacted';
+        e.target.remove();
+      }
+    });
+  </script>
+</body>
+</html>

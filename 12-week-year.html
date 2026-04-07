@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12‑Week Year Planner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>12‑Week Year Planner</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Track Your Goals</h2>
+      <p>This simple planner helps you break down your goals into weekly tasks. The
+      12‑Week Year productivity system encourages you to focus on shorter
+      execution cycles and hold yourself accountable【392972657872649†L1-L215】. Add
+      tasks along with target dates and track your progress below.</p>
+      <form id="task-form">
+        <label for="task-name">Task:</label><br>
+        <input type="text" id="task-name" name="task-name" required><br><br>
+        <label for="due-date">Due Date:</label><br>
+        <input type="date" id="due-date" name="due-date" required><br><br>
+        <button type="submit">Add Task</button>
+      </form>
+      <h3>Your Tasks</h3>
+      <ul id="task-list"></ul>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const taskForm = document.getElementById('task-form');
+    const taskList = document.getElementById('task-list');
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('task-name').value.trim();
+      const due = document.getElementById('due-date').value;
+      if (!name || !due) return;
+      const li = document.createElement('li');
+      li.textContent = `${name} (Due: ${due})`;
+      // add checkbox for completion
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.style.marginRight = '0.5rem';
+      li.prepend(checkbox);
+      taskList.appendChild(li);
+      taskForm.reset();
+    });
+  </script>
+</body>
+</html>

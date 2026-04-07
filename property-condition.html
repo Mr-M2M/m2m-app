@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Condition Worksheet</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Property Condition Worksheet</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Rate Property Condition</h2>
+      <p>Use this worksheet to rate the condition of a property on a scale from 1
+      (poor) to 5 (excellent) for various categories such as exterior, interior,
+      mechanical systems, and overall appeal. The final score can help you
+      generate a PDF report as described in the app plan【392972657872649†L1-L215】.</p>
+      <form id="condition-form">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Rating (1–5)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Exterior</td>
+              <td><input type="number" min="1" max="5" value="3" class="rating" /></td>
+            </tr>
+            <tr>
+              <td>Interior</td>
+              <td><input type="number" min="1" max="5" value="3" class="rating" /></td>
+            </tr>
+            <tr>
+              <td>Mechanical Systems</td>
+              <td><input type="number" min="1" max="5" value="3" class="rating" /></td>
+            </tr>
+            <tr>
+              <td>Overall Appeal</td>
+              <td><input type="number" min="1" max="5" value="3" class="rating" /></td>
+            </tr>
+          </tbody>
+        </table><br>
+        <button type="submit">Calculate Score</button>
+      </form>
+      <h3>Average Score</h3>
+      <p id="condition-score">—</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const conditionForm = document.getElementById('condition-form');
+    const scoreEl = document.getElementById('condition-score');
+    conditionForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const ratings = Array.from(document.querySelectorAll('.rating')).map(r => {
+        const val = parseInt(r.value);
+        return isNaN(val) ? 0 : val;
+      });
+      const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+      scoreEl.textContent = avg.toFixed(2);
+    });
+  </script>
+</body>
+</html>

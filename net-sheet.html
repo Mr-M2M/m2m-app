@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Net Sheet Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Seller Net Sheet Calculator</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Estimate Your Net Proceeds</h2>
+      <p>This calculator helps sellers approximate the amount they will receive after
+      closing. Enter the property’s sale price, your real estate commission rate,
+      closing costs, and the outstanding mortgage balance. The net sheet tool
+      described in the Marching to More app aims to automate these calculations
+      and produce a PDF for your clients【392972657872649†L1-L215】.</p>
+      <form id="net-form">
+        <label for="sale-price">Sale Price ($):</label><br>
+        <input type="number" id="sale-price" name="sale-price" step="0.01" required><br><br>
+        <label for="commission-rate">Commission Rate (%):</label><br>
+        <input type="number" id="commission-rate" name="commission-rate" step="0.1" value="6" required><br><br>
+        <label for="closing-costs">Closing Costs ($):</label><br>
+        <input type="number" id="closing-costs" name="closing-costs" step="0.01" value="0" required><br><br>
+        <label for="mortgage-payoff">Mortgage Payoff ($):</label><br>
+        <input type="number" id="mortgage-payoff" name="mortgage-payoff" step="0.01" value="0" required><br><br>
+        <button type="submit">Calculate Net</button>
+      </form>
+      <h3>Net Proceeds</h3>
+      <p id="net-result">$0.00</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const netForm = document.getElementById('net-form');
+    const netResult = document.getElementById('net-result');
+    netForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const salePrice = parseFloat(document.getElementById('sale-price').value) || 0;
+      const commissionRate = parseFloat(document.getElementById('commission-rate').value) || 0;
+      const closingCosts = parseFloat(document.getElementById('closing-costs').value) || 0;
+      const mortgagePayoff = parseFloat(document.getElementById('mortgage-payoff').value) || 0;
+      // commission rate is entered as percent
+      const commission = salePrice * (commissionRate / 100);
+      const net = salePrice - commission - closingCosts - mortgagePayoff;
+      netResult.textContent = net.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    });
+  </script>
+</body>
+</html>

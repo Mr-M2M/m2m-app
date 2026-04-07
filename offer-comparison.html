@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offer Comparison Tool</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Offer Comparison Tool</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Compare Multiple Offers</h2>
+      <p>Use this table to compare multiple purchase offers side by side. Add each
+      offer’s name, price, any closing cost assistance or concessions, and notes.
+      This tool is inspired by the multiple‑offer comparison module outlined in the app plan【392972657872649†L1-L215】.</p>
+      <button id="add-offer">Add Offer</button>
+      <table id="offers-table">
+        <thead>
+          <tr>
+            <th>Offer Name</th>
+            <th>Price ($)</th>
+            <th>Closing Costs ($)</th>
+            <th>Notes</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const addBtn = document.getElementById('add-offer');
+    const tbody = document.querySelector('#offers-table tbody');
+    function addRow() {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" placeholder="Buyer 1" /></td>
+        <td><input type="number" step="0.01" placeholder="0" /></td>
+        <td><input type="number" step="0.01" placeholder="0" /></td>
+        <td><input type="text" placeholder="Notes" /></td>
+        <td><button type="button" class="remove-btn">Remove</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+    addBtn.addEventListener('click', addRow);
+    tbody.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-btn')) {
+        e.target.closest('tr').remove();
+      }
+    });
+    // add an initial row on load
+    addRow();
+  </script>
+</body>
+</html>

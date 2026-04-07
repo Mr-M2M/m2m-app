@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rent vs Own Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Rent vs Own Calculator</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Compare Your Options</h2>
+      <p>The rent‑vs‑own calculator helps you compare the monthly cost of renting
+      against purchasing a home. Enter your monthly rent, purchase details,
+      interest rate, loan term, and estimated taxes and insurance. The tool
+      described in the app concept uses mortgage data to help clients decide
+      between renting and owning【392972657872649†L1-L215】.</p>
+      <form id="rent-own-form">
+        <label for="rent">Monthly Rent ($):</label><br>
+        <input type="number" id="rent" name="rent" step="0.01" required><br><br>
+        <label for="purchase-price">Purchase Price ($):</label><br>
+        <input type="number" id="purchase-price" name="purchase-price" step="0.01" required><br><br>
+        <label for="down-payment">Down Payment ($):</label><br>
+        <input type="number" id="down-payment" name="down-payment" step="0.01" required><br><br>
+        <label for="interest-rate">Interest Rate (%):</label><br>
+        <input type="number" id="interest-rate" name="interest-rate" step="0.01" value="6" required><br><br>
+        <label for="loan-term">Loan Term (years):</label><br>
+        <input type="number" id="loan-term" name="loan-term" step="1" value="30" required><br><br>
+        <label for="taxes-insurance">Monthly Taxes &amp; Insurance ($):</label><br>
+        <input type="number" id="taxes-insurance" name="taxes-insurance" step="0.01" value="0" required><br><br>
+        <button type="submit">Calculate</button>
+      </form>
+      <h3>Results</h3>
+      <p id="rent-own-result"></p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    function calculateMortgage(principal, annualRate, years) {
+      const monthlyRate = annualRate / 100 / 12;
+      const payments = years * 12;
+      if (monthlyRate === 0) return principal / payments;
+      return principal * (monthlyRate * Math.pow(1 + monthlyRate, payments)) / (Math.pow(1 + monthlyRate, payments) - 1);
+    }
+    const form = document.getElementById('rent-own-form');
+    const resultEl = document.getElementById('rent-own-result');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rent = parseFloat(document.getElementById('rent').value) || 0;
+      const purchasePrice = parseFloat(document.getElementById('purchase-price').value) || 0;
+      const downPayment = parseFloat(document.getElementById('down-payment').value) || 0;
+      const interestRate = parseFloat(document.getElementById('interest-rate').value) || 0;
+      const loanTerm = parseInt(document.getElementById('loan-term').value) || 30;
+      const taxesIns = parseFloat(document.getElementById('taxes-insurance').value) || 0;
+      const loanAmount = purchasePrice - downPayment;
+      const mortgage = calculateMortgage(loanAmount, interestRate, loanTerm);
+      const monthlyOwnershipCost = mortgage + taxesIns;
+      let text = `Your estimated monthly mortgage payment is $${mortgage.toFixed(2)}. Including taxes and insurance, your total monthly cost would be $${monthlyOwnershipCost.toFixed(2)}.`;
+      if (rent > 0) {
+        const diff = monthlyOwnershipCost - rent;
+        if (Math.abs(diff) < 1e-2) {
+          text += ` This is roughly the same as your current rent of $${rent.toFixed(2)}.`;
+        } else if (diff > 0) {
+          text += ` Owning would cost about $${diff.toFixed(2)} more per month than renting at $${rent.toFixed(2)}.`;
+        } else {
+          text += ` Owning would save about $${Math.abs(diff).toFixed(2)} per month compared to your rent of $${rent.toFixed(2)}.`;
+        }
+      }
+      resultEl.textContent = text;
+    });
+  </script>
+</body>
+</html>

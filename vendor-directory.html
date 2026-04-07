@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preferred Vendor Directory</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Preferred Vendor Directory</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Find Trusted Professionals</h2>
+      <p>The Marching To More app envisions a comprehensive directory of preferred
+      vendors to support every stage of a real estate transaction—from lenders and
+      inspectors to contractors and attorneys【392972657872649†L1-L215】. This prototype
+      provides a simple search and category filter. You can add your own vendors
+      below to build a personalized list.</p>
+      <input type="text" id="vendor-search" placeholder="Search vendors..." />
+      <select id="vendor-category">
+        <option value="all">All Categories</option>
+        <option value="inspectors">Home Inspectors</option>
+        <option value="contractors">Contractors</option>
+        <option value="lenders">Lenders</option>
+        <option value="insurance">Insurance Agents</option>
+        <option value="attorneys">Attorneys</option>
+      </select>
+      <button id="add-vendor">Add Vendor</button>
+      <table id="vendor-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Contact</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- vendors will be added here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const vendorTableBody = document.querySelector('#vendor-table tbody');
+    const addVendorBtn = document.getElementById('add-vendor');
+    const searchInput = document.getElementById('vendor-search');
+    const categorySelect = document.getElementById('vendor-category');
+    function renderRows() {
+      const rows = vendorTableBody.querySelectorAll('tr');
+      const search = searchInput.value.toLowerCase();
+      const category = categorySelect.value;
+      rows.forEach(row => {
+        const name = row.children[0].textContent.toLowerCase();
+        const cat = row.dataset.category;
+        const matchesSearch = name.includes(search);
+        const matchesCat = category === 'all' || cat === category;
+        row.style.display = matchesSearch && matchesCat ? '' : 'none';
+      });
+    }
+    addVendorBtn.addEventListener('click', () => {
+      const name = prompt('Enter vendor name');
+      if (!name) return;
+      const category = prompt('Enter category (inspectors, contractors, lenders, insurance, attorneys)');
+      const contact = prompt('Enter contact info (phone or email)');
+      const tr = document.createElement('tr');
+      tr.dataset.category = category;
+      tr.innerHTML = `
+        <td>${name}</td>
+        <td>${category}</td>
+        <td>${contact}</td>
+        <td><button type="button" class="remove-vendor">Remove</button></td>
+      `;
+      vendorTableBody.appendChild(tr);
+      renderRows();
+    });
+    vendorTableBody.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-vendor')) {
+        e.target.closest('tr').remove();
+      }
+    });
+    searchInput.addEventListener('input', renderRows);
+    categorySelect.addEventListener('change', renderRows);
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Collaboration</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Team Collaboration &amp; Communication</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Group Chat</h2>
+      <p>This basic group chat allows team members to leave messages for each other.
+      Future versions will include real‑time messaging, file sharing and meeting
+      scheduling【392972657872649†L1-L215】.</p>
+      <div id="chat-area" style="background:#fff;padding:1rem;border:1px solid #ccc;height:200px;overflow-y:auto;"></div>
+      <form id="message-form" style="margin-top:1rem;display:flex;">
+        <input type="text" id="message-input" style="flex:1;padding:0.5rem;" placeholder="Type a message..." required />
+        <button type="submit" style="margin-left:0.5rem;">Send</button>
+      </form>
+    </section>
+    <section>
+      <h2>Task Board</h2>
+      <p>Add tasks for the team. Tasks can be assigned a status (To Do, In
+      Progress, Done) to track progress.</p>
+      <form id="task-board-form">
+        <label for="task-title">Task:</label><br>
+        <input type="text" id="task-title" required><br><br>
+        <label for="task-status">Status:</label><br>
+        <select id="task-status">
+          <option value="todo">To Do</option>
+          <option value="inprogress">In Progress</option>
+          <option value="done">Done</option>
+        </select><br><br>
+        <button type="submit">Add Task</button>
+      </form>
+      <table id="task-board-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    // Chat logic
+    const chatArea = document.getElementById('chat-area');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    function appendChatMsg(msg, sender) {
+      const p = document.createElement('p');
+      p.textContent = `${sender}: ${msg}`;
+      chatArea.appendChild(p);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = messageInput.value.trim();
+      if (!msg) return;
+      appendChatMsg(msg, 'You');
+      messageInput.value = '';
+    });
+    // Task board logic
+    const taskBoardForm = document.getElementById('task-board-form');
+    const taskBoardTable = document.querySelector('#task-board-table tbody');
+    taskBoardForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('task-title').value.trim();
+      const status = document.getElementById('task-status').value;
+      if (!title) return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${title}</td>
+        <td class="status-cell">${status.replace('inprogress','In Progress').replace('todo','To Do').replace('done','Done')}</td>
+        <td><button type="button" class="delete-task">Delete</button></td>
+      `;
+      taskBoardTable.appendChild(tr);
+      taskBoardForm.reset();
+    });
+    taskBoardTable.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-task')) {
+        e.target.closest('tr').remove();
+      }
+    });
+  </script>
+</body>
+</html>

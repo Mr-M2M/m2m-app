@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zion AI Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Zion AI/ML Voice Assistant</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Talk to Zion</h2>
+      <p>The app concept includes an AI/ML voice assistant named Zion that can help
+      you search the MLS, schedule appointments, and answer questions【392972657872649†L1-L215】.
+      This prototype provides a basic chat interface to demonstrate how a
+      conversation might look. Responses are simulated and do not represent
+      actual AI output.</p>
+      <div id="chat-box" style="background:#fff;padding:1rem;border:1px solid #ccc;height:300px;overflow-y:auto;"></div>
+      <form id="chat-form" style="margin-top:1rem;display:flex;">
+        <input type="text" id="chat-input" style="flex:1;padding:0.5rem;" placeholder="Ask me anything..." required />
+        <button type="submit" style="margin-left:0.5rem;">Send</button>
+      </form>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const chatBox = document.getElementById('chat-box');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    function appendMessage(text, sender) {
+      const p = document.createElement('p');
+      p.textContent = `${sender}: ${text}`;
+      chatBox.appendChild(p);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+      appendMessage(msg, 'You');
+      // simple echo for now
+      setTimeout(() => {
+        appendMessage('I received: ' + msg, 'Zion');
+      }, 500);
+      chatInput.value = '';
+    });
+  </script>
+</body>
+</html>

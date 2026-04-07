@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inside‑Sales Call Tracking</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Inside‑Sales Call Tracking</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="12-week-year.html">12‑Week Year</a></li>
+        <li><a href="net-sheet.html">Seller Net Sheet</a></li>
+        <li><a href="rent-vs-own.html">Rent vs Own</a></li>
+        <li><a href="offer-comparison.html">Offer Comparison</a></li>
+        <li><a href="utility-guide.html">Utility Guide</a></li>
+        <li><a href="vendor-directory.html">Vendor Directory</a></li>
+        <li><a href="education-library.html">Education Library</a></li>
+        <li><a href="call-tracking.html">Call Tracking</a></li>
+        <li><a href="property-condition.html">Condition Worksheet</a></li>
+        <li><a href="voice-assistant.html">AI Assistant</a></li>
+        <li><a href="crm.html">CRM</a></li>
+        <li><a href="collaboration.html">Collaboration</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Log and Analyze Calls</h2>
+      <p>This section is a placeholder for the inside‑sales call tracking system
+      envisioned for the app【392972657872649†L1-L215】. In the future it will allow
+      agents to log calls, dial clients automatically, and analyze call metrics.
+      For now you can manually record call details below.</p>
+      <form id="call-form">
+        <label for="call-date">Date:</label><br>
+        <input type="date" id="call-date" required><br><br>
+        <label for="client-name">Client Name:</label><br>
+        <input type="text" id="client-name" required><br><br>
+        <label for="call-summary">Summary:</label><br>
+        <textarea id="call-summary" rows="4" cols="50" required></textarea><br><br>
+        <button type="submit">Add Call</button>
+      </form>
+      <h3>Call Log</h3>
+      <ul id="call-log"></ul>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 Marching To More Solutions</p>
+  </footer>
+  <script>
+    const callForm = document.getElementById('call-form');
+    const callLog = document.getElementById('call-log');
+    callForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const date = document.getElementById('call-date').value;
+      const client = document.getElementById('client-name').value.trim();
+      const summary = document.getElementById('call-summary').value.trim();
+      if (!date || !client || !summary) return;
+      const li = document.createElement('li');
+      li.textContent = `${date}: ${client} – ${summary}`;
+      callLog.appendChild(li);
+      callForm.reset();
+    });
+  </script>
+</body>
+</html>
